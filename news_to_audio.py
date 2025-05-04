@@ -139,7 +139,11 @@ class NewsToAudio:
             
             # For WhatsApp, Twilio requires media to be hosted at a publicly accessible URL
             # We'll use Twilio's Media API to upload the file
-        
+            self.twilio_client.messages.create(
+                body="Here's your news audio update!!!",
+                from_=whatsapp_from,
+                to=whatsapp_to
+            )
             media = self.twilio_client.messages.create(
                 body="Here's your news audio update for today!",
                 from_=whatsapp_from,
