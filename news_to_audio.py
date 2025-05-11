@@ -15,6 +15,7 @@ class NewsToAudio:
         self.aws_access_key = os.getenv('AWS_ACCESS_KEY_ID')
         self.aws_secret_key = os.getenv('AWS_SECRET_ACCESS_KEY')
         self.aws_region = os.getenv('AWS_REGION')
+        self.bucket_name = os.getenv('BUCKET_NAME')
         self.twilio_account_sid = os.getenv('TWILIO_ACCOUNT_SID')
         self.twilio_auth_token = os.getenv('TWILIO_AUTH_TOKEN')
         self.twilio_phone_number = os.getenv('TWILIO_PHONE_NUMBER')
@@ -43,7 +44,7 @@ class NewsToAudio:
             'country': country,
             'category': category,
             'apiKey': self.news_api_key,
-            'size' : 3
+            'size' : 1
         }
         
         try:
@@ -105,18 +106,17 @@ class NewsToAudio:
                 return None
             # Step 3: Upload to S3
             s3_client = boto3.client('s3')
-            bucket_name = 'temp-storage-mp3'  # 🔁 Replace with your bucket name
             s3_key = f"audio/{output_filename}"
 
             s3_client.upload_file(output_path, 
-                                  bucket_name, 
+                                 self.bucket_name, 
                                   s3_key,
                                   ExtraArgs={'ContentType': 'audio/mpeg'}
                                   )
 
             # Step 4: Return public URL
             region = s3_client.meta.region_name
-            s3_url = f"https://{bucket_name}.s3.{region}.amazonaws.com/{s3_key}"
+            s3_url = f"https://{self.bucket_name}.s3.{region}.amazonaws.com/{s3_key}"
             return s3_url
         except Exception as e:
             print(f"Error in text-to-speech conversion: {e}")

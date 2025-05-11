@@ -1,93 +1,51 @@
-# News to Audio WhatsApp Sender
+# WhatsApp News Sender
 
-This application fetches news articles from the News API, converts them to audio using AWS Polly, and sends the audio file via WhatsApp using Twilio.
+This application fetches news articles, converts them to audio using AWS Polly, and sends them via WhatsApp using Twilio.
 
 ## Features
 
-- Fetch top news articles from various categories and countries
+- Fetch news articles from NewsData.io API
 - Convert news text to speech using AWS Polly
 - Send audio files via WhatsApp using Twilio
-- Fallback to SMS/MMS if WhatsApp sending fails
+- Web interface to register recipient phone numbers
 
-## Prerequisites
+## Setup
 
-- Python 3.6 or higher
-- News API key (get it from [newsapi.org](https://newsapi.org/))
-- AWS account with access to Polly service
-- Twilio account with WhatsApp capability
-
-## Installation
-
-1. Clone this repository:
-   ```
-   git clone https://github.com/yourusername/news-to-audio.git
-   cd news-to-audio
-   ```
-
-2. Install the required dependencies:
+1. Clone the repository
+2. Install dependencies:
    ```
    pip install -r requirements.txt
    ```
-
-3. Create a `.env` file with your credentials:
+3. Set up your environment variables in `.env` file (see `.env.template` for reference)
+4. Run the web application:
    ```
-   python news_to_audio.py --create-env
+   python app.py
    ```
-   This will create a `.env.template` file. Rename it to `.env` and fill in your credentials.
+5. Open your browser and navigate to `http://localhost:5000`
+6. Register your phone number to receive news updates
 
-## Usage
+## Running the News Sender
 
-Run the application with default settings:
+After registering your phone number through the web interface, you can run the news sender script:
+
 ```
 python news_to_audio.py
 ```
 
-Customize the news category, country, and number of articles:
+## Command Line Options
+
 ```
-python news_to_audio.py --category business --country gb --count 3
+python news_to_audio.py --category technology --country us --count 5
 ```
 
-### Command-line Arguments
-
-- `--create-env`: Create a template .env file
 - `--category`: News category (default: technology)
 - `--country`: Country code (default: us)
 - `--count`: Number of news articles (default: 5)
+- `--create-env`: Create a template .env file
 
-### Available News Categories
+## Requirements
 
-- business
-- entertainment
-- general
-- health
-- science
-- sports
-- technology
-
-### Country Codes
-
-The News API supports many country codes, including:
-- us (United States)
-- gb (United Kingdom)
-- in (India)
-- au (Australia)
-- ca (Canada)
-- etc.
-
-## WhatsApp Setup
-
-To use WhatsApp with Twilio:
-
-1. Set up a Twilio account and enable WhatsApp sandbox
-2. Follow Twilio's instructions to connect your WhatsApp number to the sandbox
-3. The recipient must opt-in to receive messages from your Twilio WhatsApp number
-
-## Notes
-
-- For WhatsApp messaging, both the sender and recipient numbers must be properly formatted with country codes
-- If WhatsApp sending fails, the application will attempt to send the audio via SMS/MMS as a fallback
-- Audio files are saved in the `output` directory
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+- Python 3.6+
+- AWS account with Polly access
+- Twilio account with WhatsApp capabilities
+- NewsData.io API key
